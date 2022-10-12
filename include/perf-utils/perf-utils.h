@@ -7,7 +7,15 @@
 #include <linux/perf_event.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
+#include <stdint.h>
 
+struct read_format {
+    uint64_t nr;
+    struct {
+	uint64_t value;
+	uint64_t id;
+    } values[0];
+};
 
 // Source: From perf_event_open manpage
 static long
@@ -24,17 +32,33 @@ perf_event_open(struct perf_event_attr *hw_event, pid_t pid,
 
 static long
 perf_event_enable(int fd) {
-ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);    
+    ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);    
 }
+
+static long
+perf_event_enable_all(int fd) {
+    ioctl(fd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP);
+}
+
 
 static long
 perf_event_disable(int fd) {
     ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
 }
 
+static long
+perf_event_disable_all(int fd) {
+    ioctl(fd, PERF_EVENT_IOC_DISABLE, PERF_IOC_FLAG_GROUP);
+}
+
 static long 
 perf_event_reset(int fd) {
     ioctl(fd, PERF_EVENT_IOC_RESET, 0);
+}
+
+static long
+perf_event_reset_all(int fd) {
+    ioctl(fd, PERF_EVENT_IOC_RESET, PERF_IOC_FLAG_GROUP);
 }
 
 static long long
