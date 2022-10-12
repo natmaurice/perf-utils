@@ -15,3 +15,5 @@ set(inc_dir include)
 
 set(perf-utils_files
   )
+
+add_subdirectory(test)

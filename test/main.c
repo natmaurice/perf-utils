@@ -30,12 +30,15 @@ int main(int argc, char** argv)  {
     fd_cycles = perf_event_open(&pe_cycles, 0, -1, -1, 0);
     if (fd_cycles == -1) {
 	fprintf(stderr, "Error opening leader %llx\n", pe_cycles.config);
+	perror("Err");
+
 	exit(EXIT_FAILURE);
     }
 
     fd_branch = perf_event_open(&pe_branch, 0, -1, -1, 0);
     if (fd_cycles == -1) {
 	fprintf(stderr, "Error opening leader %llx\n", pe_cycles.config);
+	perror("Err");
 	exit(EXIT_FAILURE);
     }
     
